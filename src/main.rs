@@ -7,13 +7,13 @@
 
 
 use core::panic::PanicInfo;
-use blog_os::println;
+use blog_os::{hlt_loop, println};
 
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     println!("{}", _info);
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]
@@ -41,5 +41,5 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    loop {}
+    hlt_loop()
 }
