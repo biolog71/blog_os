@@ -7,10 +7,13 @@
 
 pub mod gdt;
 pub mod interrupts;
+pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
 
 use crate::interrupts::PIC_1_OFFSET;
+#[cfg(test)]
+use bootloader::{BootInfo, entry_point};
 use core::panic::PanicInfo;
 
 pub fn init() {
@@ -98,9 +101,19 @@ fn panic(info: &PanicInfo) -> ! {
 }
 
 #[cfg(test)]
-#[unsafe(no_mangle)]
-pub extern "C" fn _start() -> ! {
+entry_point!(test_kernel_start);
+
+#[cfg(test)]
+fn test_kernel_start(_: &'static BootInfo) -> ! {
     init();
     test_main();
     hlt_loop();
 }
+
+// #[cfg(test)]
+// #[unsafe(no_mangle)]
+// pub extern "C" fn _start() -> ! {
+//     init();
+//     test_main();
+//     hlt_loop();
+// }
